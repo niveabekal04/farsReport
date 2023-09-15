@@ -1,0 +1,63 @@
+---
+title: "FARS"
+author: "Nivea Bekal"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{FARS}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+The `FARS` package contains functions provided for the students. These functions were written to analyze data from the [US National Highway Traffic Safety Administration's Fatality Analysis Reporting System](https://www.nhtsa.gov) (FARS). FARS is a nationwide census providing the American public yearly data regarding fatal injuries suffered in motor vehicle traffic crashes.
+
+## Dependencies
+
+You need to load the following packages before starting:
+
+```{r, echo=TRUE, include=TRUE}
+install.packages("devtools")
+library(devtools)
+library(dplyr)
+library(maps)
+library(readr)
+library(tidyr)
+```
+
+
+## Functions
+
+```{r}
+
+devtools::install_github("https://github.com/niveabekal04/farsReport")
+library(farsReport)
+farsReport::fars_summarize_years(years = c(2013, 2014))
+```
+
+### FARS mapplot per state
+The `fars_map_state(state.num, year)` function will plot FARS accidents for specififed `year` on border map of the state (specified by `state.num` parameter). This function does not return any data, the side effect of the function is the plot of FARS accident on the border map of the state.
+
+```{r, fig.show='hold'}
+library(farsReport)
+farsReport::fars_map_state(state.num = 13, year = 2014)
+farsReport::fars_map_state(state.num = 34, year = 2014)
+```
+
+## FARS data structure
+The function responsible for reading the data is `fars_read(filename)`, whereas filename argument is generated via the `fars_make_filename(year)` function, which returns path to a `year` dataset from saved range of years 2013-2015 (with default `year` being 2013).
+
+The structure of an example dataset (for year 2013) is written below:
+
+```{r, echo=FALSE}
+library(farsReport)
+knitr::kable(str(farsReport::fars_read(farsReport::fars_make_filename())))
+```
+
